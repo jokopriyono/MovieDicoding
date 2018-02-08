@@ -9,10 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.R;
 import id.web.jokopriyono.moviedicoding.response.ResultsItem;
 
@@ -36,7 +40,8 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.txtJudul.setText(dataFilm.get(position).getTitle());
-        holder.txtDeskripsi.setText(dataFilm.get(position).getOverview());
+        if (dataFilm.get(position).getPosterPath() != null)
+            Picasso.with(context).load(BuildConfig.ImageURL + dataFilm.get(position).getPosterPath()).into(holder.imgFilm);
     }
 
     @Override
@@ -45,12 +50,13 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        TextView txtJudul, txtDeskripsi;
+        TextView txtJudul;
+        ImageView imgFilm;
 
         ViewHolder(final View view) {
             super(view);
             txtJudul = view.findViewById(R.id.txt_judul);
-            txtDeskripsi = view.findViewById(R.id.txt_deskripsi);
+            imgFilm = view.findViewById(R.id.img_film);
         }
     }
 }

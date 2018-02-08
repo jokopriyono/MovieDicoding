@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -39,7 +40,7 @@ public class CariActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_cari);
 
         recycler = findViewById(R.id.recycler);
-        recycler.setLayoutManager(new LinearLayoutManager(this));
+        recycler.setLayoutManager(new GridLayoutManager(this, 2));
         linearLayout = findViewById(R.id.linear_kosong);
         Button btnCari = findViewById(R.id.btn_cari);
         btnCari.setOnClickListener(this);
