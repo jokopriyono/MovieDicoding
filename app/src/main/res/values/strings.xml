@@ -5,4 +5,8 @@
     <string name="dimana">Dimana ya filmnya?</string>
     <string name="minus">-</string>
     <string name="please_wait">Mohon menunggu..</string>
+    <string name="deskripsi">Deskripsi</string>
+    <string name="release_date">Tanggal Rilis</string>
+    <string name="popularity">Nilai Popularitas</string>
+    <string name="language">Kode Bahasa</string>
 </resources>

@@ -1,9 +1,10 @@
 package id.web.jokopriyono.moviedicoding.response;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class ResultsItem{
+public class ResultsItem implements Serializable {
 
 	@SerializedName("overview")
 	private String overview;
@@ -33,10 +34,10 @@ public class ResultsItem{
 	private String releaseDate;
 
 	@SerializedName("vote_average")
-	private double voteAverage;
+	private Double voteAverage;
 
 	@SerializedName("popularity")
-	private double popularity;
+	private Double popularity;
 
 	@SerializedName("id")
 	private int id;
@@ -119,19 +120,19 @@ public class ResultsItem{
 		return releaseDate;
 	}
 
-	public void setVoteAverage(double voteAverage){
+	public void setVoteAverage(Double voteAverage){
 		this.voteAverage = voteAverage;
 	}
 
-	public double getVoteAverage(){
+	public Double getVoteAverage(){
 		return voteAverage;
 	}
 
-	public void setPopularity(double popularity){
+	public void setPopularity(Double popularity){
 		this.popularity = popularity;
 	}
 
-	public double getPopularity(){
+	public Double getPopularity(){
 		return popularity;
 	}
 

@@ -5,6 +5,8 @@ package id.web.jokopriyono.moviedicoding.adapter;
  */
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import java.util.List;
 
 import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.R;
+import id.web.jokopriyono.moviedicoding.activities.DetailActivity;
 import id.web.jokopriyono.moviedicoding.response.ResultsItem;
 
 public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
@@ -38,10 +41,22 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         holder.txtJudul.setText(dataFilm.get(position).getTitle());
+
         if (dataFilm.get(position).getPosterPath() != null)
             Picasso.with(context).load(BuildConfig.ImageURL + dataFilm.get(position).getPosterPath()).into(holder.imgFilm);
+
+        final int holderPos = holder.getAdapterPosition();
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(DetailActivity.DATA_INTENT, dataFilm.get(holderPos));
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -52,11 +67,13 @@ public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtJudul;
         ImageView imgFilm;
+        CardView cardView;
 
         ViewHolder(final View view) {
             super(view);
             txtJudul = view.findViewById(R.id.txt_judul);
             imgFilm = view.findViewById(R.id.img_film);
+            cardView = view.findViewById(R.id.card_view);
         }
     }
 }

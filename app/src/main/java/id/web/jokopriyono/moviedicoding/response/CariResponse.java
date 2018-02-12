@@ -1,9 +1,10 @@
 package id.web.jokopriyono.moviedicoding.response;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class CariResponse {
+public class CariResponse implements Serializable{
 
 	@SerializedName("page")
 	private int page;
