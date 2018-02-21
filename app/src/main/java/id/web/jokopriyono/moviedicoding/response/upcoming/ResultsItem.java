@@ -1,9 +1,10 @@
 package id.web.jokopriyono.moviedicoding.response.upcoming;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class ResultsItem{
+public class ResultsItem implements Serializable{
 
 	@SerializedName("overview")
 	private String overview;

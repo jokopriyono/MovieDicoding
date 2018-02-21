@@ -2,7 +2,9 @@ package id.web.jokopriyono.moviedicoding.response.upcoming;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Dates{
+import java.io.Serializable;
+
+public class Dates implements Serializable{
 
 	@SerializedName("maximum")
 	private String maximum;

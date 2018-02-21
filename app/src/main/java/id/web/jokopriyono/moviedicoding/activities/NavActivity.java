@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import id.web.jokopriyono.moviedicoding.R;
 import id.web.jokopriyono.moviedicoding.fragments.HomeFragment;
@@ -44,6 +45,15 @@ public class NavActivity extends AppCompatActivity
             navItemIndex = 0;
             CURRENT_TAG = TAG_HOME;
             loadHomeFragment();
+        }
+
+        if (getIntent().getExtras()!=null){
+            if (getIntent().getExtras().getSerializable(SplashActivity.NOW_PLAYING)!=null){
+                Toast.makeText(this, "Now Playing gak null", Toast.LENGTH_SHORT).show();
+            }
+            if (getIntent().getExtras().getSerializable(SplashActivity.UP_COMING)!=null){
+                Toast.makeText(this, "Up Coming gak null", Toast.LENGTH_SHORT).show();
+            }
         }
 
         navigationView.setNavigationItemSelectedListener(this);

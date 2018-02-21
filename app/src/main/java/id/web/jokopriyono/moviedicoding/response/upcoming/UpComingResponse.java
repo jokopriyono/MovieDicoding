@@ -1,9 +1,10 @@
 package id.web.jokopriyono.moviedicoding.response.upcoming;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class UpComingResponse{
+public class UpComingResponse implements Serializable{
 
 	@SerializedName("dates")
 	private Dates dates;
