@@ -21,7 +21,7 @@ import java.util.List;
 import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.R;
 import id.web.jokopriyono.moviedicoding.activities.DetailActivity;
-import id.web.jokopriyono.moviedicoding.response.ResultsItem;
+import id.web.jokopriyono.moviedicoding.response.carifilm.ResultsItem;
 
 public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
     private List<ResultsItem> dataFilm;

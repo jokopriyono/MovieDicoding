@@ -7,12 +7,16 @@ import android.os.Bundle;
 
 import com.jaredrummler.android.widget.AnimatedSvgView;
 
+import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.R;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SplashActivity extends AppCompatActivity {
 
     private AnimatedSvgView animatedSvgView;
     private final static int SPLASH_TIME = 3000;
+    private Retrofit retrofit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,11 @@ public class SplashActivity extends AppCompatActivity {
             }
         }, 500);
 
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BuildConfig.ApiURL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -36,4 +45,6 @@ public class SplashActivity extends AppCompatActivity {
             }
         }, SPLASH_TIME);
     }
+
+
 }

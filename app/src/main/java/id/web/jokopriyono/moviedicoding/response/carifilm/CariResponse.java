@@ -1,4 +1,4 @@
-package id.web.jokopriyono.moviedicoding.response;
+package id.web.jokopriyono.moviedicoding.response.carifilm;
 
 import java.io.Serializable;
 import java.util.List;

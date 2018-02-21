@@ -1,9 +1,6 @@
 package id.web.jokopriyono.moviedicoding.activities;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -20,7 +17,7 @@ import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.MethodHelper;
 import id.web.jokopriyono.moviedicoding.R;
 import id.web.jokopriyono.moviedicoding.adapter.FilmAdapter;
-import id.web.jokopriyono.moviedicoding.response.CariResponse;
+import id.web.jokopriyono.moviedicoding.response.carifilm.CariResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
