@@ -7,9 +7,8 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +17,7 @@ import android.widget.Toast;
 
 import id.web.jokopriyono.moviedicoding.ApiServices;
 import id.web.jokopriyono.moviedicoding.BuildConfig;
+import id.web.jokopriyono.moviedicoding.MethodHelper;
 import id.web.jokopriyono.moviedicoding.R;
 import id.web.jokopriyono.moviedicoding.adapter.FilmAdapter;
 import id.web.jokopriyono.moviedicoding.response.CariResponse;
@@ -39,6 +39,14 @@ public class CariActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cari);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         recycler = findViewById(R.id.recycler);
         recycler.setLayoutManager(new GridLayoutManager(this, 2));
         linearLayout = findViewById(R.id.linear_kosong);
@@ -53,7 +61,7 @@ public class CariActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btn_cari:
                 if (edtCari.getText().toString().equals(""))
                     Toast.makeText(this, "Kolom pencarian jangan lupa diisi gan", Toast.LENGTH_SHORT).show();
-                else if (!checkInternet(this))
+                else if (!MethodHelper.checkInternet(this))
                     Toast.makeText(this, "Wah cek koneksi internet dulu gan", Toast.LENGTH_SHORT).show();
                 else {
                     linearLayout.setVisibility(View.GONE);
@@ -79,7 +87,7 @@ public class CariActivity extends AppCompatActivity implements View.OnClickListe
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         ApiServices services = retrofit.create(ApiServices.class);
-        Call<CariResponse> result = services.cariFilm(BuildConfig.ApiKey, query, false);
+        Call<CariResponse> result = services.cariFilm(BuildConfig.ApiKey, query);
         result.enqueue(new Callback<CariResponse>() {
             @Override
             public void onResponse(Call<CariResponse> call, Response<CariResponse> response) {
@@ -108,19 +116,5 @@ public class CariActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(CariActivity.this, "Nampaknya ada error", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    /**
-     * Pengecekan koneksi data device
-     * @param context context pemanggil
-     * @return default true, jika false artinya tidak ada sambungan data
-     */
-    public static boolean checkInternet(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = null;
-        if (cm != null) {
-            netInfo = cm.getActiveNetworkInfo();
-        }
-        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

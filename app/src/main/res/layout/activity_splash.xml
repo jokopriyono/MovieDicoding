@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+    <com.jaredrummler.android.widget.AnimatedSvgView
+        android:id="@+id/animate_svg_logo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        app:animatedSvgFillColors="@array/logo_colors"
+        app:animatedSvgGlyphStrings="@array/logo_animasi"
+        app:animatedSvgFillStart="1200"
+        app:animatedSvgFillTime="1000"
+        app:animatedSvgTraceTime="2000"
+        app:animatedSvgTraceTimePerGlyph="1000"
+        app:animatedSvgImageSizeX="7940"
+        app:animatedSvgImageSizeY="2010"/>
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

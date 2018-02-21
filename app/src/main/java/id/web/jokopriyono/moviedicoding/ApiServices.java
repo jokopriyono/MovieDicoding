@@ -12,6 +12,5 @@ import retrofit2.http.Query;
 public interface ApiServices {
     @GET("3/search/movie")
     Call<CariResponse> cariFilm(@Query("api_key") String apiKey,
-                                @Query("query") String query,
-                                @Query("include_adult") boolean includeAdult);
+                                @Query("query") String query);
 }

@@ -3,4 +3,20 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="logo_1">#2d3e50</color>
+    <color name="logo_2">#FFFFFF</color>
+
+    <integer-array name="logo_colors">
+        <item>@color/logo_2</item>
+        <item>@color/logo_1</item>
+        <item>@color/logo_1</item>
+        <item>@color/logo_1</item>
+        <item>@color/logo_1</item>
+        <item>@color/logo_1</item>
+        <item>@color/logo_1</item>
+        <item>@color/logo_1</item>
+        <item>@color/logo_1</item>
+        <item>@color/logo_1</item>
+        <item>@color/logo_1</item>
+    </integer-array>
 </resources>
