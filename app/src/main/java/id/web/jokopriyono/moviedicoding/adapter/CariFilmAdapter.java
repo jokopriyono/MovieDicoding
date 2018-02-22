@@ -21,13 +21,13 @@ import java.util.List;
 import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.R;
 import id.web.jokopriyono.moviedicoding.activities.DetailActivity;
-import id.web.jokopriyono.moviedicoding.response.carifilm.ResultsItem;
+import id.web.jokopriyono.moviedicoding.api.carifilm.ResultsItem;
 
-public class FilmAdapter extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
+public class CariFilmAdapter extends RecyclerView.Adapter<CariFilmAdapter.ViewHolder> {
     private List<ResultsItem> dataFilm;
     private Context context;
 
-    public FilmAdapter(List<ResultsItem> response, Context context) {
+    public CariFilmAdapter(List<ResultsItem> response, Context context) {
         this.dataFilm = response;
         this.context = context;
     }

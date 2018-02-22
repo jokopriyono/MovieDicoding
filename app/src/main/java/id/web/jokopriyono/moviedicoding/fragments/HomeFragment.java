@@ -20,8 +20,7 @@ import java.util.List;
 
 import id.web.jokopriyono.moviedicoding.R;
 import id.web.jokopriyono.moviedicoding.activities.SplashActivity;
-import id.web.jokopriyono.moviedicoding.response.nowplaying.NowPlayingResponse;
-import id.web.jokopriyono.moviedicoding.response.upcoming.UpComingResponse;
+import id.web.jokopriyono.moviedicoding.api.carifilm.CariResponse;
 
 public class HomeFragment extends Fragment {
     public HomeFragment() {
@@ -41,8 +40,8 @@ public class HomeFragment extends Fragment {
         UpComingFragment fragUpComing = new UpComingFragment();
 
         if (bundle!=null) {
-            NowPlayingResponse nowPlayingResponse = (NowPlayingResponse) bundle.getSerializable(SplashActivity.NOW_PLAYING);
-            UpComingResponse upComingResponse = (UpComingResponse) bundle.getSerializable(SplashActivity.UP_COMING);
+            CariResponse nowPlayingResponse = (CariResponse) bundle.getSerializable(SplashActivity.NOW_PLAYING);
+            CariResponse upComingResponse = (CariResponse) bundle.getSerializable(SplashActivity.UP_COMING);
             Bundle bundle2;
             if (nowPlayingResponse!=null) {
                 bundle2 = new Bundle();

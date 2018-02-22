@@ -12,12 +12,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import id.web.jokopriyono.moviedicoding.ApiServices;
+import id.web.jokopriyono.moviedicoding.api.ApiServices;
 import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.MethodHelper;
 import id.web.jokopriyono.moviedicoding.R;
-import id.web.jokopriyono.moviedicoding.adapter.FilmAdapter;
-import id.web.jokopriyono.moviedicoding.response.carifilm.CariResponse;
+import id.web.jokopriyono.moviedicoding.adapter.CariFilmAdapter;
+import id.web.jokopriyono.moviedicoding.api.carifilm.CariResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -91,7 +91,7 @@ public class CariActivity extends AppCompatActivity implements View.OnClickListe
                 loading.dismiss();
                 if (response.body()!=null){
                     if (response.body().getResults() != null){
-                        FilmAdapter adapter = new FilmAdapter(response.body().getResults(), getApplicationContext());
+                        CariFilmAdapter adapter = new CariFilmAdapter(response.body().getResults(), getApplicationContext());
                         recycler.setAdapter(adapter);
                         adapter.notifyDataSetChanged();
                     } else {

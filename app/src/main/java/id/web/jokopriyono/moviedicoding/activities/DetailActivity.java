@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 
 import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.R;
-import id.web.jokopriyono.moviedicoding.response.carifilm.ResultsItem;
+import id.web.jokopriyono.moviedicoding.api.carifilm.ResultsItem;
 
 public class DetailActivity extends AppCompatActivity {
     public static final String DATA_INTENT = "data";

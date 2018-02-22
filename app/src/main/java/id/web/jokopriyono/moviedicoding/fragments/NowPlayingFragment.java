@@ -6,14 +6,17 @@ package id.web.jokopriyono.moviedicoding.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import id.web.jokopriyono.moviedicoding.R;
+import id.web.jokopriyono.moviedicoding.activities.SplashActivity;
+import id.web.jokopriyono.moviedicoding.adapter.CariFilmAdapter;
+import id.web.jokopriyono.moviedicoding.api.carifilm.CariResponse;
 
 public class NowPlayingFragment extends Fragment {
     public NowPlayingFragment() {
@@ -24,9 +27,17 @@ public class NowPlayingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.frag_movies, container, false);
 
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_movies);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         Bundle bundle = this.getArguments();
-        if (bundle!=null)
-            Toast.makeText(getContext(), "Now play gak null", Toast.LENGTH_SHORT).show();
+        if (bundle!=null) {
+            CariResponse response = (CariResponse) bundle.getSerializable(SplashActivity.NOW_PLAYING);
+            if (response!=null) {
+                CariFilmAdapter adapter = new CariFilmAdapter(response.getResults(), getContext());
+                recyclerView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+        }
 
         return view;
     }

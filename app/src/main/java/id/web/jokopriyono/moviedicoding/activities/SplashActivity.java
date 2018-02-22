@@ -14,12 +14,11 @@ import com.jaredrummler.android.widget.AnimatedSvgView;
 
 import java.lang.ref.WeakReference;
 
-import id.web.jokopriyono.moviedicoding.ApiServices;
+import id.web.jokopriyono.moviedicoding.api.ApiServices;
 import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.MethodHelper;
 import id.web.jokopriyono.moviedicoding.R;
-import id.web.jokopriyono.moviedicoding.response.nowplaying.NowPlayingResponse;
-import id.web.jokopriyono.moviedicoding.response.upcoming.UpComingResponse;
+import id.web.jokopriyono.moviedicoding.api.carifilm.CariResponse;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -98,8 +97,8 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
-    private UpComingResponse getUpComing(){
-        Call<UpComingResponse> responseCall = services.upComing(BuildConfig.ApiKey);
+    private CariResponse getUpComing(){
+        Call<CariResponse> responseCall = services.upComing(BuildConfig.ApiKey);
         try {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -110,8 +109,8 @@ public class SplashActivity extends AppCompatActivity {
         }
     }
 
-    private NowPlayingResponse getNowPlaying(){
-        Call<NowPlayingResponse> responseCall = services.nowPlaying(BuildConfig.ApiKey);
+    private CariResponse getNowPlaying(){
+        Call<CariResponse> responseCall = services.nowPlaying(BuildConfig.ApiKey);
         try {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);

@@ -1,4 +1,4 @@
-package id.web.jokopriyono.moviedicoding.response.upcoming;
+package id.web.jokopriyono.moviedicoding.api.carifilm;
 
 import com.google.gson.annotations.SerializedName;
 
