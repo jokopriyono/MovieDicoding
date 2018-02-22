@@ -47,15 +47,6 @@ public class NavActivity extends AppCompatActivity
             loadHomeFragment();
         }
 
-        if (getIntent().getExtras()!=null){
-            if (getIntent().getExtras().getSerializable(SplashActivity.NOW_PLAYING)!=null){
-                Toast.makeText(this, "Now Playing gak null", Toast.LENGTH_SHORT).show();
-            }
-            if (getIntent().getExtras().getSerializable(SplashActivity.UP_COMING)!=null){
-                Toast.makeText(this, "Up Coming gak null", Toast.LENGTH_SHORT).show();
-            }
-        }
-
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -73,7 +64,18 @@ public class NavActivity extends AppCompatActivity
     private Fragment pilihFragment() {
         switch (navItemIndex){
             case 0:
-                return new HomeFragment();
+                HomeFragment homeFragment = new HomeFragment();
+                if (getIntent().getExtras()!=null){
+                    Bundle bundle = new Bundle();
+                    if (getIntent().getExtras().getSerializable(SplashActivity.NOW_PLAYING)!=null){
+                        bundle.putSerializable(SplashActivity.NOW_PLAYING, getIntent().getExtras().getSerializable(SplashActivity.NOW_PLAYING));
+                    }
+                    if (getIntent().getExtras().getSerializable(SplashActivity.UP_COMING)!=null){
+                        bundle.putSerializable(SplashActivity.UP_COMING, getIntent().getExtras().getSerializable(SplashActivity.UP_COMING));
+                    }
+                    homeFragment.setArguments(bundle);
+                }
+                return homeFragment;
             default:
                 return new HomeFragment();
         }

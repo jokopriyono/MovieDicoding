@@ -7,14 +7,11 @@ import android.os.Message;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.jaredrummler.android.widget.AnimatedSvgView;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import id.web.jokopriyono.moviedicoding.ApiServices;
@@ -29,36 +26,30 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private AnimatedSvgView animatedSvgView;
-    private final static int ANIMATION_TIME = 500;
+    private final static int ANIMATION_TIME = 2000;
     private ApiServices services;
     public static final String NOW_PLAYING = "nowplaying";
     public static final String UP_COMING = "upcoming";
+    private ProgressBar loading;
+    private Thread thread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        animatedSvgView = findViewById(R.id.animate_svg_logo);
-        ProgressBar loading = findViewById(R.id.progress_bar);
-        animatedSvgView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                animatedSvgView.start();
-            }
-        }, ANIMATION_TIME);
-        loading.setVisibility(View.VISIBLE);
+        AnimatedSvgView animatedSvgView = findViewById(R.id.animate_svg_logo);
+        loading = findViewById(R.id.progress_bar);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.ApiURL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         services = retrofit.create(ApiServices.class);
-        new Thread(new Runnable() {
+
+        thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d("pesan", "masuk");
                 Message msg = new Message();
                 Bundle result =new Bundle();
                 if (MethodHelper.checkInternet(getApplicationContext())) {
@@ -69,6 +60,14 @@ public class SplashActivity extends AppCompatActivity {
                 handler.sendMessage(msg);
             }
         });
+        animatedSvgView.start();
+        animatedSvgView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loading.setVisibility(View.VISIBLE);
+                thread.start();
+            }
+        }, ANIMATION_TIME);
     }
 
     GetTaskHandler handler = new GetTaskHandler(this);
