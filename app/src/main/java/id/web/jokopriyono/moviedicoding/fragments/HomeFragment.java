@@ -10,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +24,19 @@ import id.web.jokopriyono.moviedicoding.activities.SplashActivity;
 import id.web.jokopriyono.moviedicoding.api.carifilm.CariResponse;
 
 public class HomeFragment extends Fragment {
+
+    private CariResponse response;
+
     public HomeFragment() {
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+        if (bundle!=null){
+            response = (CariResponse) bundle.getSerializable(SplashActivity.NOW_PLAYING);
+        }
     }
 
     @Nullable
@@ -34,27 +47,11 @@ public class HomeFragment extends Fragment {
         TabLayout tabLayout = view.findViewById(R.id.tab_layout);
         ViewPager viewPager = view.findViewById(R.id.view_pager);
 
-        Bundle bundle = this.getArguments();
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
-        NowPlayingFragment fragNowPlaying = new NowPlayingFragment();
+
         UpComingFragment fragUpComing = new UpComingFragment();
+        NowPlayingFragment fragNowPlaying = new NowPlayingFragment();
 
-        if (bundle!=null) {
-            CariResponse nowPlayingResponse = (CariResponse) bundle.getSerializable(SplashActivity.NOW_PLAYING);
-            CariResponse upComingResponse = (CariResponse) bundle.getSerializable(SplashActivity.UP_COMING);
-            Bundle bundle2;
-            if (nowPlayingResponse!=null) {
-                bundle2 = new Bundle();
-                bundle2.putSerializable(SplashActivity.NOW_PLAYING, nowPlayingResponse);
-                fragNowPlaying.setArguments(bundle2);
-            }
-            if (upComingResponse!=null) {
-                bundle2 = new Bundle();
-                bundle2.putSerializable(SplashActivity.UP_COMING, upComingResponse);
-                fragUpComing.setArguments(bundle2);
-            }
-
-        }
         viewPagerAdapter.addFrag(fragNowPlaying, SplashActivity.NOW_PLAYING);
         viewPagerAdapter.addFrag(fragUpComing, SplashActivity.UP_COMING);
         viewPager.setAdapter(viewPagerAdapter);

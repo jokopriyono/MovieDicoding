@@ -16,7 +16,7 @@ public class ResultsItem implements Serializable {
 	private String originalTitle;
 
 	@SerializedName("video")
-	private boolean video;
+	private String video;
 
 	@SerializedName("title")
 	private String title;
@@ -43,7 +43,7 @@ public class ResultsItem implements Serializable {
 	private int id;
 
 	@SerializedName("adult")
-	private boolean adult;
+	private String adult;
 
 	@SerializedName("vote_count")
 	private int voteCount;
@@ -72,11 +72,11 @@ public class ResultsItem implements Serializable {
 		return originalTitle;
 	}
 
-	public void setVideo(boolean video){
+	public void setVideo(String video){
 		this.video = video;
 	}
 
-	public boolean isVideo(){
+	public String getVideo(){
 		return video;
 	}
 
@@ -144,11 +144,11 @@ public class ResultsItem implements Serializable {
 		return id;
 	}
 
-	public void setAdult(boolean adult){
+	public void setAdult(String adult){
 		this.adult = adult;
 	}
 
-	public boolean isAdult(){
+	public String isAdult(){
 		return adult;
 	}
 

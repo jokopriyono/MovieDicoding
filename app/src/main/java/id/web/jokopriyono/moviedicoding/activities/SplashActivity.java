@@ -2,6 +2,7 @@ package id.web.jokopriyono.moviedicoding.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
@@ -19,6 +20,8 @@ import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.MethodHelper;
 import id.web.jokopriyono.moviedicoding.R;
 import id.web.jokopriyono.moviedicoding.api.carifilm.CariResponse;
+import id.web.jokopriyono.moviedicoding.database.DB;
+import id.web.jokopriyono.moviedicoding.database.LocalDB;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -31,6 +34,7 @@ public class SplashActivity extends AppCompatActivity {
     public static final String UP_COMING = "upcoming";
     private ProgressBar loading;
     private Thread thread;
+    private static LocalDB localDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +73,7 @@ public class SplashActivity extends AppCompatActivity {
         }, ANIMATION_TIME);
     }
 
-    GetTaskHandler handler = new GetTaskHandler(this);
+    private GetTaskHandler handler = new GetTaskHandler(this);
     private static class GetTaskHandler extends Handler {
         private final WeakReference<SplashActivity> weakReference;
         private final Activity activity;
@@ -85,10 +89,10 @@ public class SplashActivity extends AppCompatActivity {
                 if (msg != null) {
                     Intent i = new Intent(activity, NavActivity.class);
                     if (msg.getData().getSerializable(UP_COMING) != null) {
-                        i.putExtra(UP_COMING, msg.getData().getSerializable(UP_COMING));
+                        LocalDB.saveUpComing(activity, (CariResponse) msg.getData().getSerializable(UP_COMING));
                     }
                     if (msg.getData().getSerializable(NOW_PLAYING) != null) {
-                        i.putExtra(NOW_PLAYING, msg.getData().getSerializable(NOW_PLAYING));
+                        LocalDB.saveNowPlaying(activity, (CariResponse) msg.getData().getSerializable(NOW_PLAYING));
                     }
                     activity.startActivity(i);
                     activity.finish();

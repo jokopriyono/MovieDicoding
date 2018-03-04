@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Movie Dicoding</string>
+    <string name="film_title">Titre de film</string>
+    <string name="search">Chercher</string>
+    <string name="where_is">Hmm Où est?</string>
+    <string name="minus">-</string>
+    <string name="please_wait">S\'il vous plaît, attendez..</string>
+    <string name="description">La description</string>
+    <string name="release_date">Date de sortie</string>
+    <string name="popularity_value">Valeur de la popularité</string>
+    <string name="language_code">Code de langue</string>
+    <string name="title_activity_nav">NavActivity</string>
+    <string name="navigation_drawer_open">Ouvrir le tiroir de navigation</string>
+    <string name="navigation_drawer_close">Fermer le tiroir de navigation</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="home">Accueil</string>
+    <string name="setting">Paramètres</string>
+    <string name="joko_priyono">Joko Priyono</string>
+    <string name="refresh">Rafraîchir</string>
+    <string name="now_playing">Lecture en cours</string>
+    <string name="up_coming">À venir</string>
+    <string name="change_language">Changer de langue</string>
+</resources>
