@@ -7,4 +7,5 @@
     <string name="now_playing">Now Playing</string>
     <string name="up_coming">Up Coming</string>
     <string name="search">Search</string>
+    <string name="error_no_conn">Please check your connection</string>
 </resources>

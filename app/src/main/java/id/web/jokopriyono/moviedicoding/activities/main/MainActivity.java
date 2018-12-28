@@ -8,20 +8,24 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import id.web.jokopriyono.moviedicoding.R;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
-    private int navPosition = 2;
+    @BindView(R.id.bottom_view)
+    BottomNavigationView bottom;
+    private int navPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        loadFragment(new SearchFragment());
+        loadFragment(new NowPlayingFragment());
 
-        BottomNavigationView bottom = findViewById(R.id.bottom_view);
-        bottom.setSelectedItemId(R.id.menu_search);
+        bottom.setSelectedItemId(R.id.menu_last);
         bottom.setOnNavigationItemSelectedListener(this);
     }
 

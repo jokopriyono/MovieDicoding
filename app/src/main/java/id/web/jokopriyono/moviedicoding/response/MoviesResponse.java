@@ -1,9 +1,11 @@
 package id.web.jokopriyono.moviedicoding.response;
 
-import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class CariResponse {
+import java.io.Serializable;
+import java.util.List;
+
+public class MoviesResponse implements Serializable {
 
 	@SerializedName("page")
 	private int page;
@@ -13,6 +15,9 @@ public class CariResponse {
 
 	@SerializedName("results")
 	private List<ResultsItem> results;
+
+    @SerializedName("dates")
+    private Dates dates;
 
 	@SerializedName("total_results")
 	private int totalResults;
@@ -49,14 +54,23 @@ public class CariResponse {
 		return totalResults;
 	}
 
+    public Dates getDates() {
+        return dates;
+    }
+
+    public void setDates(Dates dates) {
+        this.dates = dates;
+    }
+
 	@Override
  	public String toString(){
-		return 
-			"SearchResponse{" + 
+		return
+                "MoviesResponse{" +
 			"page = '" + page + '\'' + 
 			",total_pages = '" + totalPages + '\'' + 
 			",results = '" + results + '\'' + 
-			",total_results = '" + totalResults + '\'' + 
+			",total_results = '" + totalResults + '\'' +
+                        ",dates = '" + dates + '\'' +
 			"}";
 		}
 }
