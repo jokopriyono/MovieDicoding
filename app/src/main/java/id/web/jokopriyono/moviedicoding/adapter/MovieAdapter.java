@@ -5,6 +5,7 @@ package id.web.jokopriyono.moviedicoding.adapter;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.R;
+import id.web.jokopriyono.moviedicoding.activities.detail.DetailMovieActivity;
 import id.web.jokopriyono.moviedicoding.response.ResultsItem;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
@@ -85,7 +87,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
         @Override
         public void onClick(View view) {
-//            context.startActivity();
+            Intent i = new Intent(context, DetailMovieActivity.class);
+            i.putExtra(DetailMovieActivity.INTENT_DATA, dataFilm.get(getAdapterPosition()));
+            context.startActivity(i);
         }
     }
 }

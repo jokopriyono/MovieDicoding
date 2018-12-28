@@ -8,4 +8,12 @@
     <string name="up_coming">Up Coming</string>
     <string name="search">Search</string>
     <string name="error_no_conn">Please check your connection</string>
+    <string name="rating">Rating</string>
+    <string name="adult">Adult</string>
+    <string name="language">Language</string>
+    <string name="genre">Genre</string>
+    <string name="release">Release</string>
+    <string name="overview">Overview</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import butterknife.BindView;
@@ -15,6 +16,9 @@ import id.web.jokopriyono.moviedicoding.R;
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.bottom_view)
     BottomNavigationView bottom;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     private int navPosition = 0;
 
     @Override
@@ -23,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        toolbar.setTitle(R.string.now_playing);
         loadFragment(new NowPlayingFragment());
 
         bottom.setSelectedItemId(R.id.menu_last);
@@ -34,18 +39,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         switch (item.getItemId()) {
             case R.id.menu_last:
                 if (navPosition != 0) {
+                    toolbar.setTitle(R.string.now_playing);
                     loadFragment(new NowPlayingFragment());
                     navPosition = 0;
                 }
                 return true;
             case R.id.menu_next:
                 if (navPosition != 1) {
+                    toolbar.setTitle(R.string.up_coming);
                     loadFragment(new NextComingFragment());
                     navPosition = 1;
                 }
                 return true;
             case R.id.menu_search:
                 if (navPosition != 2) {
+                    toolbar.setTitle(R.string.search);
                     loadFragment(new SearchFragment());
                     navPosition = 2;
                 }
