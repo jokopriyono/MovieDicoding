@@ -13,7 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.R;
-import id.web.jokopriyono.moviedicoding.response.ResultsItem;
+import id.web.jokopriyono.moviedicoding.data.response.movie.ResultsItem;
 
 public class DetailMovieActivity extends AppCompatActivity implements View.OnClickListener {
 

@@ -24,7 +24,7 @@ import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.CommonHelper;
 import id.web.jokopriyono.moviedicoding.R;
 import id.web.jokopriyono.moviedicoding.adapter.MovieAdapter;
-import id.web.jokopriyono.moviedicoding.response.MoviesResponse;
+import id.web.jokopriyono.moviedicoding.data.response.movie.MoviesResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

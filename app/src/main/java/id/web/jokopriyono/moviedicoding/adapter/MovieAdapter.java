@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.R;
 import id.web.jokopriyono.moviedicoding.activities.detail.DetailMovieActivity;
-import id.web.jokopriyono.moviedicoding.response.ResultsItem;
+import id.web.jokopriyono.moviedicoding.data.response.movie.ResultsItem;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
     private List<ResultsItem> dataFilm;

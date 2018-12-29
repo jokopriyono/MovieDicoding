@@ -4,7 +4,8 @@ package id.web.jokopriyono.moviedicoding;
  * Created by Joko Priyono on 08/02/2018.
  */
 
-import id.web.jokopriyono.moviedicoding.response.MoviesResponse;
+import id.web.jokopriyono.moviedicoding.data.response.genre.GenreResponse;
+import id.web.jokopriyono.moviedicoding.data.response.movie.MoviesResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -22,4 +23,7 @@ public interface ApiServices {
     @GET("3/movie/upcoming")
     Call<MoviesResponse> upComing(@Query("api_key") String apiKey,
                                   @Query("page") String page);
+
+    @GET("3/genre/movie/list")
+    Call<GenreResponse> getGenre(@Query("api_key") String apiKey);
 }
