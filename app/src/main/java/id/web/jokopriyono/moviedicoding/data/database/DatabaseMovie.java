@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,7 +47,7 @@ public class DatabaseMovie {
     public List<Genre> selectGenre(int[] ids) {
         List<Genre> arrayList = new ArrayList<>();
         Cursor cursor;
-        if (ids != null) {
+        if (ids != null && ids.length != 0) {
             String[] idsGenre = Arrays.toString(ids).split("[\\[\\]]")[1].split(", ");
             String whereClause = "";
             for (int i = 0; i < ids.length; i++) {
@@ -73,7 +74,7 @@ public class DatabaseMovie {
         return arrayList;
     }
 
-    public List<ResultsItem> selectMovie(Integer idMovie) {
+    public List<ResultsItem> selectMovie(@Nullable Integer idMovie) {
         List<ResultsItem> arrayList = new ArrayList<>();
         Cursor cursor;
         if (idMovie != null) {
@@ -89,10 +90,15 @@ public class DatabaseMovie {
             do {
                 movie = new ResultsItem();
                 String genreDb = cursor.getString(cursor.getColumnIndexOrThrow(MovieColumns.GENRE_IDS));
-                String[] stringIds = genreDb.split(",");
                 ArrayList<Integer> ids = new ArrayList<>();
-                for (String string : stringIds) {
-                    ids.add(Integer.parseInt(string));
+                if (genreDb.equals("")) {
+                    movie.setGenreIds(ids);
+                } else {
+                    String[] stringIds = genreDb.split(",");
+                    for (String string : stringIds) {
+                        ids.add(Integer.parseInt(string));
+                    }
+                    movie.setGenreIds(ids);
                 }
                 movie.setId(cursor.getInt(cursor.getColumnIndexOrThrow(MovieColumns.ID)));
                 movie.setVoteCount(cursor.getInt(cursor.getColumnIndexOrThrow(MovieColumns.VOTE_COUNT)));
@@ -103,7 +109,6 @@ public class DatabaseMovie {
                 movie.setPosterPath(cursor.getString(cursor.getColumnIndexOrThrow(MovieColumns.POSTER_PATH)));
                 movie.setOriginalLanguage(cursor.getString(cursor.getColumnIndexOrThrow(MovieColumns.ORIGINAL_LANG)));
                 movie.setOriginalTitle(cursor.getString(cursor.getColumnIndexOrThrow(MovieColumns.ORIGINAL_TITLE)));
-                movie.setGenreIds(ids);
                 movie.setBackdropPath(cursor.getString(cursor.getColumnIndexOrThrow(MovieColumns.BACKDROP_PATH)));
                 movie.setAdult(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndexOrThrow(MovieColumns.ADULT))));
                 movie.setOverview(cursor.getString(cursor.getColumnIndexOrThrow(MovieColumns.OVERVIEW)));

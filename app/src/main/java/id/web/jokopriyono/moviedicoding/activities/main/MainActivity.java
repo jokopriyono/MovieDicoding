@@ -112,6 +112,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     navPosition = 2;
                 }
                 return true;
+            case R.id.menu_favorite:
+                if (navPosition != 3) {
+                    toolbar.setTitle(R.string.favorite);
+                    loadFragment(new FavoriteFragment());
+                    navPosition = 3;
+                }
+                return true;
         }
         return false;
     }

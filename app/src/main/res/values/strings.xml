@@ -21,4 +21,5 @@
     <string name="add_fav_success">Add Favorite Success..</string>
     <string name="remove_fav_success">Remove Favorite success..</string>
     <string name="remove_fav_fail">Remove Favorite failed..</string>
+    <string name="nothing_to_show">Nothing to show..</string>
 </resources>
