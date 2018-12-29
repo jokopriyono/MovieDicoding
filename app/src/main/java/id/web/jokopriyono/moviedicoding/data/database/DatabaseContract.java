@@ -8,6 +8,7 @@ import id.web.jokopriyono.moviedicoding.BuildConfig;
 
 public class DatabaseContract {
     static final String TABLE_GENRE = "genre";
+    static final String TABLE_MOVIE = "movie";
     private static final String AUTHORITY = BuildConfig.APPLICATION_ID;
     public static final Uri CONTENT_URI = new Uri.Builder().scheme("content")
             .authority(AUTHORITY)
@@ -29,5 +30,22 @@ public class DatabaseContract {
     static final class GenreColumns implements BaseColumns {
         static String ID = "id";
         static String NAME = "name";
+    }
+
+    static final class MovieColumns implements BaseColumns {
+        static String ID = "id";
+        static String VOTE_COUNT = "vote_count";
+        static String VIDEO = "video";
+        static String VOTE_AVERAGE = "vote_average";
+        static String TITLE = "title";
+        static String POPULARITY = "popularity";
+        static String POSTER_PATH = "poster_path";
+        static String ORIGINAL_LANG = "original_lang";
+        static String ORIGINAL_TITLE = "original_title";
+        static String GENRE_IDS = "genre_ids";
+        static String BACKDROP_PATH = "backdrop_path";
+        static String ADULT = "adult";
+        static String OVERVIEW = "overview";
+        static String RELEASE_DATE = "release_date";
     }
 }

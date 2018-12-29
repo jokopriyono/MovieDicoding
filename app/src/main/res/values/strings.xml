@@ -16,4 +16,9 @@
     <string name="overview">Overview</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="favorite">Favorite</string>
+    <string name="add_fav_fail">Add Favorite failed..</string>
+    <string name="add_fav_success">Add Favorite Success..</string>
+    <string name="remove_fav_success">Remove Favorite success..</string>
+    <string name="remove_fav_fail">Remove Favorite failed..</string>
 </resources>
