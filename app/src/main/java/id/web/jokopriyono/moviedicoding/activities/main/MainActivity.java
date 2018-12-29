@@ -20,6 +20,7 @@ import id.web.jokopriyono.moviedicoding.R;
 import id.web.jokopriyono.moviedicoding.data.database.DatabaseMovie;
 import id.web.jokopriyono.moviedicoding.data.response.genre.Genre;
 import id.web.jokopriyono.moviedicoding.data.response.genre.GenreResponse;
+import id.web.jokopriyono.moviedicoding.data.sharedpref.UserPreferences;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             .build();
     private ApiServices services = retrofit.create(ApiServices.class);
     private DatabaseMovie databaseMovie;
+    private UserPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        getGenre();
+        preferences = new UserPreferences(getApplicationContext());
+        databaseMovie = new DatabaseMovie(getApplicationContext());
+        databaseMovie.open();
+
+        if (!preferences.getGenres())
+            getGenre();
 
         toolbar.setTitle(R.string.now_playing);
         loadFragment(new NowPlayingFragment());
@@ -56,12 +63,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         bottom.setOnNavigationItemSelectedListener(this);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        databaseMovie.close();
+    }
+
     private void getGenre() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                databaseMovie = new DatabaseMovie(getApplicationContext());
-                databaseMovie.open();
                 if (databaseMovie.selectGenre(null).size() == 0) {
                     if (CommonHelper.checkInternet(getApplicationContext())) {
                         Call<GenreResponse> call = services.getGenre(BuildConfig.ApiKey);
@@ -72,13 +83,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                                     for (Genre genre : response.body().getGenres()) {
                                         databaseMovie.insertGenre(genre);
                                     }
+                                    preferences.setGenres();
                                 }
-                                databaseMovie.close();
                             }
 
                             @Override
                             public void onFailure(@NonNull Call<GenreResponse> call, @NonNull Throwable t) {
-                                databaseMovie.close();
                                 t.printStackTrace();
                             }
                         });
@@ -126,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_content, fragment);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 }
