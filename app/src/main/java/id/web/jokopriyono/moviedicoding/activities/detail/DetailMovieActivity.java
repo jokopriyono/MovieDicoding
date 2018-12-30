@@ -1,6 +1,8 @@
 package id.web.jokopriyono.moviedicoding.activities.detail;
 
-import android.database.SQLException;
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +26,9 @@ import id.web.jokopriyono.moviedicoding.R;
 import id.web.jokopriyono.moviedicoding.data.database.DatabaseMovie;
 import id.web.jokopriyono.moviedicoding.data.response.genre.Genre;
 import id.web.jokopriyono.moviedicoding.data.response.movie.ResultsItem;
+
+import static id.web.jokopriyono.moviedicoding.data.database.DatabaseContract.CONTENT_URI;
+import static id.web.jokopriyono.moviedicoding.data.database.DatabaseContract.MovieColumns;
 
 public class DetailMovieActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -118,15 +123,19 @@ public class DetailMovieActivity extends AppCompatActivity implements View.OnCli
         new Thread(new Runnable() {
             @Override
             public void run() {
-                List<ResultsItem> movies = databaseMovie.selectMovie(movie.getId());
-                if (movies.size() == 1) {
-                    isFavorite = !isFavorite;
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            switchFavorite();
-                        }
-                    });
+                Uri uri = Uri.parse(CONTENT_URI + "/" + movie.getId());
+                Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+                if (cursor != null) {
+                    if (cursor.getCount() > 0) {
+                        isFavorite = !isFavorite;
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                switchFavorite();
+                            }
+                        });
+                    }
+                    cursor.close();
                 }
             }
         }).start();
@@ -182,20 +191,38 @@ public class DetailMovieActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void run() {
                 try {
-                    final long result = databaseMovie.insertMovie(movie);
+                    String ids = "";
+                    for (int i = 0; i < movie.getGenreIds().size(); i++) {
+                        if (i == 0)
+                            ids = ids.concat("" + movie.getGenreIds().get(i));
+                        else
+                            ids = ids.concat("," + movie.getGenreIds().get(i));
+                    }
+                    ContentValues values = new ContentValues();
+                    values.put(MovieColumns.ID, movie.getId());
+                    values.put(MovieColumns.VOTE_COUNT, movie.getVoteCount());
+                    values.put(MovieColumns.VIDEO, movie.isVideo());
+                    values.put(MovieColumns.VOTE_AVERAGE, movie.getVoteAverage());
+                    values.put(MovieColumns.TITLE, movie.getTitle());
+                    values.put(MovieColumns.POPULARITY, movie.getPopularity());
+                    values.put(MovieColumns.POSTER_PATH, movie.getPosterPath());
+                    values.put(MovieColumns.ORIGINAL_LANG, movie.getOriginalLanguage());
+                    values.put(MovieColumns.ORIGINAL_TITLE, movie.getOriginalTitle());
+                    values.put(MovieColumns.GENRE_IDS, ids);
+                    values.put(MovieColumns.BACKDROP_PATH, movie.getBackdropPath());
+                    values.put(MovieColumns.ADULT, movie.isAdult());
+                    values.put(MovieColumns.OVERVIEW, movie.getOverview());
+                    values.put(MovieColumns.RELEASE_DATE, movie.getReleaseDate());
+                    getContentResolver().insert(CONTENT_URI, values);
+                    isFavorite = !isFavorite;
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (result == -1) {
-                                Toast.makeText(DetailMovieActivity.this, R.string.add_fav_fail, Toast.LENGTH_SHORT).show();
-                            } else {
-                                isFavorite = !isFavorite;
-                                switchFavorite();
-                                Toast.makeText(DetailMovieActivity.this, R.string.add_fav_success, Toast.LENGTH_SHORT).show();
-                            }
+                            switchFavorite();
+                            Toast.makeText(DetailMovieActivity.this, R.string.add_fav_success, Toast.LENGTH_SHORT).show();
                         }
                     });
-                } catch (final SQLException e) {
+                } catch (final Exception e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {
                         @Override
@@ -204,6 +231,7 @@ public class DetailMovieActivity extends AppCompatActivity implements View.OnCli
                         }
                     });
                 }
+
             }
         }).start();
     }

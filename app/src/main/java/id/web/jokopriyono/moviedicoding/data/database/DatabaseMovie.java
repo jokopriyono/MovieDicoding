@@ -165,4 +165,23 @@ public class DatabaseMovie {
         return database.delete(TABLE_MOVIE, whereClause, idsGenre);
     }
 
+    public Cursor providerSelectMovie(Integer idMovie) {
+        if (idMovie != null) {
+            return database.query(TABLE_MOVIE, null
+                    , MovieColumns.ID + " = ?"
+                    , new String[]{idMovie + ""}
+                    , null, null, null, null);
+        } else {
+            return database.query(TABLE_MOVIE, null, null, null, null, null, null, null);
+        }
+    }
+
+    public long providerInsertMovie(ContentValues values) {
+        return database.insert(TABLE_MOVIE, null, values);
+    }
+
+    public int providerDeleteMovie(String idMovie) {
+        return database.delete(TABLE_MOVIE, MovieColumns.ID + " = ?"
+                , new String[]{idMovie});
+    }
 }

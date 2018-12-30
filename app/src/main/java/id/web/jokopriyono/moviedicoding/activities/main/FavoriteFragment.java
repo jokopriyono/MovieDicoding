@@ -1,6 +1,7 @@
 package id.web.jokopriyono.moviedicoding.activities.main;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -21,6 +23,8 @@ import id.web.jokopriyono.moviedicoding.R;
 import id.web.jokopriyono.moviedicoding.adapter.MovieAdapter;
 import id.web.jokopriyono.moviedicoding.data.database.DatabaseMovie;
 import id.web.jokopriyono.moviedicoding.data.response.movie.ResultsItem;
+
+import static id.web.jokopriyono.moviedicoding.data.database.DatabaseContract.CONTENT_URI;
 
 public class FavoriteFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.recycler)
@@ -63,13 +67,27 @@ public class FavoriteFragment extends Fragment implements SwipeRefreshLayout.OnR
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final List<ResultsItem> movies = databaseMovie.selectMovie(null);
-                activity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showRecycler(movies);
+                if (getActivity() != null) {
+                    Cursor cursor = getActivity().getContentResolver().query(CONTENT_URI, null, null, null, null);
+                    if (cursor != null) {
+                        if (cursor.getCount() > 0) {
+                            cursor.moveToFirst();
+                            final ArrayList<ResultsItem> movies = new ArrayList<>();
+                            for (int i = 0; i < cursor.getCount(); i++) {
+                                ResultsItem movie = new ResultsItem(cursor);
+                                movies.add(movie);
+                                cursor.moveToNext();
+                            }
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showRecycler(movies);
+                                }
+                            });
+                        }
+                        cursor.close();
                     }
-                });
+                }
             }
         }).start();
     }

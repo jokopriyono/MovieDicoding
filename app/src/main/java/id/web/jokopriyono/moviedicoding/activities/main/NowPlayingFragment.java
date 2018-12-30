@@ -100,7 +100,7 @@ public class NowPlayingFragment extends Fragment implements Callback<MoviesRespo
     @Override
     public void onFailure(@NonNull Call<MoviesResponse> call, @NonNull Throwable t) {
         refreshLayout.setRefreshing(false);
-        Snackbar.make(relativeLayout, t.getLocalizedMessage(), Snackbar.LENGTH_SHORT);
+        Toast.makeText(getContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         t.printStackTrace();
     }
 

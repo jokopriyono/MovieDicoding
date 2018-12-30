@@ -1,11 +1,50 @@
 package id.web.jokopriyono.moviedicoding.data.response.movie;
 
+import android.database.Cursor;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import id.web.jokopriyono.moviedicoding.data.database.DatabaseContract.MovieColumns;
+
+import static id.web.jokopriyono.moviedicoding.data.database.DatabaseContract.getDoubleColumn;
+import static id.web.jokopriyono.moviedicoding.data.database.DatabaseContract.getIntColumn;
+import static id.web.jokopriyono.moviedicoding.data.database.DatabaseContract.getStringColumn;
+
 public class ResultsItem implements Serializable {
+	public ResultsItem() {
+	}
+
+	public ResultsItem(Cursor cursor) {
+		String genreDb = getStringColumn(cursor, MovieColumns.GENRE_IDS);
+		ArrayList<Integer> ids = new ArrayList<>();
+		if (genreDb.equals("")) {
+			this.genreIds = ids;
+		} else {
+			String[] stringIds = genreDb.split(",");
+			for (String string : stringIds) {
+				ids.add(Integer.parseInt(string));
+			}
+			this.genreIds = ids;
+		}
+
+		this.id = getIntColumn(cursor, MovieColumns.ID);
+		this.voteCount = getIntColumn(cursor, MovieColumns.VOTE_COUNT);
+		this.video = Boolean.parseBoolean(getStringColumn(cursor, MovieColumns.VIDEO));
+		this.voteAverage = getIntColumn(cursor, MovieColumns.VOTE_AVERAGE);
+		this.title = getStringColumn(cursor, MovieColumns.TITLE);
+		this.popularity = getDoubleColumn(cursor, MovieColumns.POPULARITY);
+		this.posterPath = getStringColumn(cursor, MovieColumns.POSTER_PATH);
+		this.originalLanguage = getStringColumn(cursor, MovieColumns.ORIGINAL_LANG);
+		this.originalTitle = getStringColumn(cursor, MovieColumns.ORIGINAL_TITLE);
+		this.backdropPath = getStringColumn(cursor, MovieColumns.BACKDROP_PATH);
+		this.adult = Boolean.parseBoolean(getStringColumn(cursor, MovieColumns.ADULT));
+		this.overview = getStringColumn(cursor, MovieColumns.OVERVIEW);
+		this.releaseDate = getStringColumn(cursor, MovieColumns.RELEASE_DATE);
+	}
 
 	@SerializedName("overview")
 	private String overview;
