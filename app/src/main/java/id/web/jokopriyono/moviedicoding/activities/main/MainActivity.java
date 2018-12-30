@@ -1,6 +1,8 @@
 package id.web.jokopriyono.moviedicoding.activities.main;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -27,7 +29,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, Toolbar.OnMenuItemClickListener {
     @BindView(R.id.bottom_view)
     BottomNavigationView bottom;
     @BindView(R.id.toolbar)
@@ -56,11 +58,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         if (!preferences.getGenres())
             getGenre();
 
+        toolbar.inflateMenu(R.menu.menu_setting);
         toolbar.setTitle(R.string.now_playing);
         loadFragment(new NowPlayingFragment());
 
         bottom.setSelectedItemId(R.id.menu_last);
         bottom.setOnNavigationItemSelectedListener(this);
+        toolbar.setOnMenuItemClickListener(this);
     }
 
     @Override
@@ -137,5 +141,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_content, fragment);
         transaction.commit();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        Intent mIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+        startActivity(mIntent);
+
+        return true;
     }
 }

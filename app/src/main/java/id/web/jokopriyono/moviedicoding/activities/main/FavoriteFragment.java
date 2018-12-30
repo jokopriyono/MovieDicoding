@@ -70,22 +70,22 @@ public class FavoriteFragment extends Fragment implements SwipeRefreshLayout.OnR
                 if (getActivity() != null) {
                     Cursor cursor = getActivity().getContentResolver().query(CONTENT_URI, null, null, null, null);
                     if (cursor != null) {
+                        final ArrayList<ResultsItem> movies = new ArrayList<>();
                         if (cursor.getCount() > 0) {
                             cursor.moveToFirst();
-                            final ArrayList<ResultsItem> movies = new ArrayList<>();
                             for (int i = 0; i < cursor.getCount(); i++) {
                                 ResultsItem movie = new ResultsItem(cursor);
                                 movies.add(movie);
                                 cursor.moveToNext();
                             }
-                            activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    showRecycler(movies);
-                                }
-                            });
                         }
                         cursor.close();
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showRecycler(movies);
+                            }
+                        });
                     }
                 }
             }
