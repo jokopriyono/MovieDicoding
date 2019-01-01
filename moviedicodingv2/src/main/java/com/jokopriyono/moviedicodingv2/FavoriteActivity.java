@@ -6,7 +6,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -48,13 +47,13 @@ public class FavoriteActivity extends AppCompatActivity implements SwipeRefreshL
             public void run() {
                 final Cursor cursor = getContentResolver().query(CONTENT_URI, null, null, null, null);
                 if (cursor != null) {
-                    Log.d("pesan", "Jumlah data = " + cursor.getCount());
                     if (cursor.getCount() > 0) {
                         cursor.moveToFirst();
                         final ArrayList<Movie> movies = new ArrayList<>();
                         for (int i = 0; i < cursor.getCount(); i++) {
                             Movie movie = new Movie(cursor);
                             movies.add(movie);
+                            cursor.moveToNext();
                         }
                         runOnUiThread(new Runnable() {
                             @Override
