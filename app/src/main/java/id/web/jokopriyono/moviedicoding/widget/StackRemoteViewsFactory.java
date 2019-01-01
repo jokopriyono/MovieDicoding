@@ -2,37 +2,56 @@ package id.web.jokopriyono.moviedicoding.widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import id.web.jokopriyono.moviedicoding.BuildConfig;
 import id.web.jokopriyono.moviedicoding.R;
 
+import static id.web.jokopriyono.moviedicoding.data.database.DatabaseContract.CONTENT_URI;
+import static id.web.jokopriyono.moviedicoding.data.database.DatabaseContract.MovieColumns;
+import static id.web.jokopriyono.moviedicoding.data.database.DatabaseContract.getStringColumn;
+
 public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
-    private List<Bitmap> mWidgetItems = new ArrayList<>();
+    private List<String> urlMovie = new ArrayList<>();
     private Context mContext;
-//    private int mAppWidgetId;
 
     StackRemoteViewsFactory(Context context, Intent intent) {
         mContext = context;
-//        mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
     }
 
     @Override
     public void onCreate() {
-        for (int i = 0; i < 6; i++) {
-            mWidgetItems.add(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.example_appwidget_preview));
-        }
+        selectAllData();
     }
 
     @Override
     public void onDataSetChanged() {
 
+    }
+
+    private void selectAllData() {
+        final Cursor cursor = mContext.getContentResolver().query(CONTENT_URI, null, null, null, null);
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                for (int i = 0; i < cursor.getCount(); i++) {
+                    String url = BuildConfig.ImageURL + getStringColumn(cursor, MovieColumns.BACKDROP_PATH);
+                    urlMovie.add(url);
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+        }
     }
 
     @Override
@@ -42,13 +61,23 @@ public class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFa
 
     @Override
     public int getCount() {
-        return mWidgetItems.size();
+        return urlMovie.size();
     }
 
     @Override
     public RemoteViews getViewAt(int pos) {
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.widget_item);
-        rv.setImageViewBitmap(R.id.imageView, mWidgetItems.get(pos));
+        try {
+            Bitmap bitmap = Glide.with(mContext)
+                    .asBitmap()
+                    .load(urlMovie.get(pos))
+                    .apply(new RequestOptions().centerCrop())
+                    .submit()
+                    .get();
+            rv.setImageViewBitmap(R.id.imageView, bitmap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         Bundle extras = new Bundle();
         extras.putInt(MovieWidget.EXTRA_ITEM, pos);

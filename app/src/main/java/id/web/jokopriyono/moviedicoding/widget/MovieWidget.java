@@ -20,28 +20,17 @@ public class MovieWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-
-//        CharSequence widgetText = context.getString(R.string.appwidget_text);
-        // Construct the RemoteViews object
-//        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.movie_widget);
-//        views.setTextViewText(R.id.appwidget_text, widgetText);
-
-        // Instruct the widget manager to update the widget
-//        appWidgetManager.updateAppWidget(appWidgetId, views);
-
         Intent i = new Intent(context, StackWidgetService.class);
         i.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         i.setData(Uri.parse(i.toUri(Intent.URI_INTENT_SCHEME)));
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.movie_widget);
-
         views.setRemoteAdapter(R.id.stack_view, i);
-
         views.setEmptyView(R.id.stack_view, R.id.empty_view);
 
         Intent toastIntent = new Intent(context, MovieWidget.class);
-
         toastIntent.setAction(TOAST_ACTION);
         toastIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+
         i.setData(Uri.parse(i.toUri(Intent.URI_INTENT_SCHEME)));
         PendingIntent toastPendingIntent = PendingIntent.getBroadcast(context, 0, toastIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
