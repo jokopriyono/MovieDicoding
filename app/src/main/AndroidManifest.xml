@@ -27,6 +27,7 @@
             android:exported="true"
             android:readPermission="id.web.jokopriyono.moviedicoding.READ_DATABASE"
             android:writePermission="id.web.jokopriyono.moviedicoding.WRITE_DATABASE" />
+
         <activity
             android:name=".activities.main.MainActivity"
             android:screenOrientation="portrait">
@@ -38,6 +39,18 @@
         </activity>
         <activity android:name=".activities.detail.DetailMovieActivity" />
 
+        <receiver android:name=".widget.MovieWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/movie_widget_info" />
+        </receiver>
+        <service
+            android:name=".widget.StackWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

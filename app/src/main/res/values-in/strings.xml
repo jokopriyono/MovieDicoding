@@ -23,4 +23,6 @@
     <string name="remove_fav_fail">Menghapus Favorit gagal..</string>
     <string name="nothing_to_show">Tidak ada yang dimunculkan..</string>
     <string name="setting">Pengaturan</string>
+    <string name="appwidget_text">CONTOH</string>
+    <string name="add_widget">Tambah Widget</string>
 </resources>
