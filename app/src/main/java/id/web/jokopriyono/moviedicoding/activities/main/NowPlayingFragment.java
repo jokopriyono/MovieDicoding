@@ -32,8 +32,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NowPlayingFragment extends Fragment implements Callback<MoviesResponse>, SwipeRefreshLayout.OnRefreshListener {
+    private static final String BUNDLE_DATA = "movies";
+
     @BindView(R.id.swipe_layout)
     SwipeRefreshLayout refreshLayout;
+
     @BindView(R.id.relativelayout)
     RelativeLayout relativeLayout;
 
@@ -46,6 +49,7 @@ public class NowPlayingFragment extends Fragment implements Callback<MoviesRespo
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build();
     private ApiServices services = retrofit.create(ApiServices.class);
+    private MoviesResponse moviesResponse;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,9 +65,22 @@ public class NowPlayingFragment extends Fragment implements Callback<MoviesRespo
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         refreshLayout.setOnRefreshListener(this);
 
-        if (getContext() != null) getNowPlaying(getContext());
+        if (savedInstanceState != null) {
+            moviesResponse = (MoviesResponse) savedInstanceState.getSerializable(BUNDLE_DATA);
+            if (moviesResponse != null) {
+                setAdapterMovie(moviesResponse);
+            }
+        } else {
+            getNowPlaying(getContext());
+        }
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putSerializable(BUNDLE_DATA, moviesResponse);
+        super.onSaveInstanceState(outState);
     }
 
     private void getNowPlaying(Context context) {
@@ -76,9 +93,10 @@ public class NowPlayingFragment extends Fragment implements Callback<MoviesRespo
         }
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    private void setAdapterMovie(MoviesResponse movies) {
+        moviesResponse = movies;
+        MovieAdapter adapter = new MovieAdapter(movies.getResults(), getContext());
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -87,8 +105,7 @@ public class NowPlayingFragment extends Fragment implements Callback<MoviesRespo
 
         if (response.body() != null) {
             if (response.body().getResults().size() > 0) {
-                MovieAdapter adapter = new MovieAdapter(response.body().getResults(), getContext());
-                recyclerView.setAdapter(adapter);
+                setAdapterMovie(response.body());
             } else {
                 Snackbar.make(recyclerView, "Tidak ada data", Snackbar.LENGTH_SHORT);
             }

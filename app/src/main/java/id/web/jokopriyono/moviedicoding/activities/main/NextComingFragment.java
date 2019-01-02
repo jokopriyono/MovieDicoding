@@ -32,8 +32,11 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NextComingFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, Callback<MoviesResponse> {
+    private static final String BUNDLE_DATA = "movies";
+
     @BindView(R.id.swipe_layout)
     SwipeRefreshLayout refreshLayout;
+
     @BindView(R.id.relativelayout)
     RelativeLayout relativeLayout;
 
@@ -46,6 +49,7 @@ public class NextComingFragment extends Fragment implements SwipeRefreshLayout.O
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build();
     private ApiServices services = retrofit.create(ApiServices.class);
+    private MoviesResponse moviesResponse;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,9 +65,22 @@ public class NextComingFragment extends Fragment implements SwipeRefreshLayout.O
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         refreshLayout.setOnRefreshListener(this);
 
-        if (getContext() != null) getNextComing(getContext());
+        if (savedInstanceState != null) {
+            moviesResponse = (MoviesResponse) savedInstanceState.getSerializable(BUNDLE_DATA);
+            if (moviesResponse != null) {
+                setAdapterMovie(moviesResponse);
+            }
+        } else {
+            getNextComing(getContext());
+        }
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putSerializable(BUNDLE_DATA, moviesResponse);
+        super.onSaveInstanceState(outState);
     }
 
     private void getNextComing(Context context) {
@@ -74,6 +91,12 @@ public class NextComingFragment extends Fragment implements SwipeRefreshLayout.O
         } else {
             Toast.makeText(context, R.string.error_no_conn, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void setAdapterMovie(MoviesResponse movies) {
+        moviesResponse = movies;
+        MovieAdapter adapter = new MovieAdapter(movies.getResults(), getContext());
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -87,8 +110,7 @@ public class NextComingFragment extends Fragment implements SwipeRefreshLayout.O
 
         if (response.body() != null) {
             if (response.body().getResults().size() > 0) {
-                MovieAdapter adapter = new MovieAdapter(response.body().getResults(), getContext());
-                recyclerView.setAdapter(adapter);
+                setAdapterMovie(response.body());
             } else {
                 Snackbar.make(recyclerView, "Tidak ada data", Snackbar.LENGTH_SHORT);
             }

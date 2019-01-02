@@ -34,14 +34,21 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SearchFragment extends Fragment implements Callback<MoviesResponse>, View.OnClickListener {
+    private static final String BUNDLE_DATA = "movies";
+    private static final String BUNDLE_QUERY = "query";
+
     @BindView(R.id.linearlayout)
     LinearLayout linearLayout;
+
     @BindView(R.id.btn_cari)
     Button btnCari;
+
     @BindView(R.id.recycler)
     RecyclerView recyclerView;
+
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
+
     @BindView(R.id.edt_cari)
     EditText edtCari;
 
@@ -51,6 +58,7 @@ public class SearchFragment extends Fragment implements Callback<MoviesResponse>
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build();
     private ApiServices services = retrofit.create(ApiServices.class);
+    private MoviesResponse moviesResponse;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,9 +74,26 @@ public class SearchFragment extends Fragment implements Callback<MoviesResponse>
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         btnCari.setOnClickListener(this);
 
-        if (getContext() != null) searchMovie(getContext(), "Spiderman");
+        if (savedInstanceState != null) {
+            String query = savedInstanceState.getString(BUNDLE_QUERY);
+            moviesResponse = (MoviesResponse) savedInstanceState.getSerializable(BUNDLE_DATA);
+            if (moviesResponse != null) {
+                progressBar.setVisibility(View.GONE);
+                setAdapterMovie(moviesResponse);
+            }
+            edtCari.setText(query);
+        } else {
+            searchMovie(getContext(), "Spiderman");
+        }
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putSerializable(BUNDLE_DATA, moviesResponse);
+        outState.putString(BUNDLE_QUERY, edtCari.getText().toString());
+        super.onSaveInstanceState(outState);
     }
 
     private void searchMovie(Context context, String query) {
@@ -79,6 +104,12 @@ public class SearchFragment extends Fragment implements Callback<MoviesResponse>
         } else {
             Toast.makeText(context, R.string.error_no_conn, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void setAdapterMovie(MoviesResponse movies) {
+        moviesResponse = movies;
+        MovieAdapter adapter = new MovieAdapter(movies.getResults(), getContext());
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -92,8 +123,7 @@ public class SearchFragment extends Fragment implements Callback<MoviesResponse>
 
         if (response.body() != null) {
             if (response.body().getResults().size() > 0) {
-                MovieAdapter adapter = new MovieAdapter(response.body().getResults(), getContext());
-                recyclerView.setAdapter(adapter);
+                setAdapterMovie(response.body());
             } else {
                 Snackbar.make(recyclerView, "Tidak ada data", Snackbar.LENGTH_SHORT);
             }

@@ -2,6 +2,7 @@ package id.web.jokopriyono.moviedicoding.activities.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -30,12 +31,20 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, Toolbar.OnMenuItemClickListener {
+    private static final String TAG_NOW_PLAY = "fragmentnowplay";
+    private static final String TAG_UP_COMING = "fragmentupcoming";
+    private static final String TAG_SEARCH = "fragmentsearch";
+    private static final String TAG_FAVORITE = "fragmentfavorite";
+    private static final String TAG_ACTIVE = "fragmentfavorite";
+
     @BindView(R.id.bottom_view)
     BottomNavigationView bottom;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    private int navPosition = 0;
+    private String TAG_FRAGMENT = TAG_NOW_PLAY;
+    private int navPosition;
     private Gson gson = new Gson();
     private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BuildConfig.ApiURL)
@@ -44,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private ApiServices services = retrofit.create(ApiServices.class);
     private DatabaseMovie databaseMovie;
     private UserPreferences preferences;
+    private NowPlayingFragment nowPlayingFragment;
+    private NextComingFragment upComingFragment;
+    private SearchFragment searchFragment;
+    private FavoriteFragment favoriteFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,20 +64,68 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        toolbar.inflateMenu(R.menu.menu_setting);
         preferences = new UserPreferences(getApplicationContext());
         databaseMovie = new DatabaseMovie(getApplicationContext());
         databaseMovie.open();
 
+        bottom.setOnNavigationItemSelectedListener(this);
+        toolbar.setOnMenuItemClickListener(this);
+
         if (!preferences.getGenres())
             getGenre();
 
-        toolbar.inflateMenu(R.menu.menu_setting);
-        toolbar.setTitle(R.string.now_playing);
-        loadFragment(new NowPlayingFragment());
+        if (savedInstanceState != null) {
+            TAG_FRAGMENT = savedInstanceState.getString(TAG_ACTIVE);
+            if (TAG_FRAGMENT != null) {
+                selectFragmentState(TAG_FRAGMENT);
+            }
+        } else {
+            toolbar.setTitle(R.string.now_playing);
+            nowPlayingFragment = new NowPlayingFragment();
+            loadFragment(nowPlayingFragment, TAG_NOW_PLAY);
+            navPosition = 0;
+            bottom.setSelectedItemId(R.id.menu_last);
+        }
+    }
 
-        bottom.setSelectedItemId(R.id.menu_last);
-        bottom.setOnNavigationItemSelectedListener(this);
-        toolbar.setOnMenuItemClickListener(this);
+    private void selectFragmentState(String tagFragment) {
+        switch (tagFragment) {
+            case TAG_NOW_PLAY:
+                toolbar.setTitle(R.string.now_playing);
+                nowPlayingFragment = (NowPlayingFragment)
+                        getSupportFragmentManager().findFragmentByTag(TAG_NOW_PLAY);
+                navPosition = 0;
+                bottom.setSelectedItemId(R.id.menu_last);
+                break;
+            case TAG_UP_COMING:
+                toolbar.setTitle(R.string.up_coming);
+                upComingFragment = (NextComingFragment)
+                        getSupportFragmentManager().findFragmentByTag(TAG_UP_COMING);
+                navPosition = 1;
+                bottom.setSelectedItemId(R.id.menu_next);
+                break;
+            case TAG_SEARCH:
+                toolbar.setTitle(R.string.search);
+                searchFragment = (SearchFragment)
+                        getSupportFragmentManager().findFragmentByTag(TAG_SEARCH);
+                navPosition = 2;
+                bottom.setSelectedItemId(R.id.menu_search);
+                break;
+            case TAG_FAVORITE:
+                toolbar.setTitle(R.string.favorite);
+                favoriteFragment = (FavoriteFragment)
+                        getSupportFragmentManager().findFragmentByTag(TAG_FAVORITE);
+                navPosition = 3;
+                bottom.setSelectedItemId(R.id.menu_favorite);
+                break;
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        outState.putString(TAG_ACTIVE, TAG_FRAGMENT);
+        super.onSaveInstanceState(outState, outPersistentState);
     }
 
     @Override
@@ -107,29 +168,37 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         switch (item.getItemId()) {
             case R.id.menu_last:
                 if (navPosition != 0) {
+                    TAG_FRAGMENT = TAG_NOW_PLAY;
                     toolbar.setTitle(R.string.now_playing);
-                    loadFragment(new NowPlayingFragment());
+                    nowPlayingFragment = new NowPlayingFragment();
+                    loadFragment(nowPlayingFragment, TAG_NOW_PLAY);
                     navPosition = 0;
                 }
                 return true;
             case R.id.menu_next:
                 if (navPosition != 1) {
+                    TAG_FRAGMENT = TAG_UP_COMING;
                     toolbar.setTitle(R.string.up_coming);
-                    loadFragment(new NextComingFragment());
+                    upComingFragment = new NextComingFragment();
+                    loadFragment(upComingFragment, TAG_UP_COMING);
                     navPosition = 1;
                 }
                 return true;
             case R.id.menu_search:
                 if (navPosition != 2) {
+                    TAG_FRAGMENT = TAG_SEARCH;
                     toolbar.setTitle(R.string.search);
-                    loadFragment(new SearchFragment());
+                    searchFragment = new SearchFragment();
+                    loadFragment(searchFragment, TAG_SEARCH);
                     navPosition = 2;
                 }
                 return true;
             case R.id.menu_favorite:
                 if (navPosition != 3) {
+                    TAG_FRAGMENT = TAG_FAVORITE;
                     toolbar.setTitle(R.string.favorite);
-                    loadFragment(new FavoriteFragment());
+                    favoriteFragment = new FavoriteFragment();
+                    loadFragment(favoriteFragment, TAG_FAVORITE);
                     navPosition = 3;
                 }
                 return true;
@@ -137,9 +206,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         return false;
     }
 
-    private void loadFragment(Fragment fragment) {
+    private void loadFragment(Fragment fragment, String tag) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_content, fragment);
+        transaction.replace(R.id.frame_content, fragment, tag);
         transaction.commit();
     }
 

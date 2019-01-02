@@ -28,9 +28,7 @@
             android:readPermission="id.web.jokopriyono.moviedicoding.READ_DATABASE"
             android:writePermission="id.web.jokopriyono.moviedicoding.WRITE_DATABASE" />
 
-        <activity
-            android:name=".activities.main.MainActivity"
-            android:screenOrientation="portrait">
+        <activity android:name=".activities.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

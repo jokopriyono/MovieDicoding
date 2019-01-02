@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -74,14 +75,23 @@ public class DetailMovieActivity extends AppCompatActivity implements View.OnCli
 
         if (getIntent().getExtras() != null) {
             movie = (ResultsItem) getIntent().getExtras().getSerializable(INTENT_DATA);
-            if (movie != null) {
-                showDetailMovie(movie);
-                checkMovieDB(movie);
-            }
+        } else if (savedInstanceState != null) {
+            movie = (ResultsItem) savedInstanceState.getSerializable(INTENT_DATA);
+        }
+
+        if (movie != null) {
+            showDetailMovie(movie);
+            checkMovieDB(movie);
         }
 
         fab.setOnClickListener(this);
         fabFav.setOnClickListener(this);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putSerializable(INTENT_DATA, movie);
     }
 
     @Override
