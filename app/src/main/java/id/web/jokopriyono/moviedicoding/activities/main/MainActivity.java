@@ -24,6 +24,8 @@ import id.web.jokopriyono.moviedicoding.data.database.DatabaseMovie;
 import id.web.jokopriyono.moviedicoding.data.response.genre.Genre;
 import id.web.jokopriyono.moviedicoding.data.response.genre.GenreResponse;
 import id.web.jokopriyono.moviedicoding.data.sharedpref.UserPreferences;
+import id.web.jokopriyono.moviedicoding.service.DailyReceiver;
+import id.web.jokopriyono.moviedicoding.service.NowPlayReceiver;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -63,6 +65,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        DailyReceiver dailyReceiver = new DailyReceiver();
+        NowPlayReceiver nowPlayReceiver = new NowPlayReceiver();
+        dailyReceiver.setRepeatingAlarm(this);
+        nowPlayReceiver.setRepeatingAlarm(this);
 
         toolbar.inflateMenu(R.menu.menu_setting);
         preferences = new UserPreferences(getApplicationContext());
